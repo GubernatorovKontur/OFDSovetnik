@@ -9,6 +9,7 @@
 </head>
 <body>
     <div class="container">
+        <!-- Левая панель с данными клиента -->
         <div class="left-panel">
             <h1>Данные клиента</h1>
             <div class="form-group">
@@ -37,12 +38,14 @@
             </div>
             <button id="save-client-data">Сохранить в лог</button>
         </div>
+        <!-- Основное окно со сценарием -->
         <div class="main-window">
             <h1>Советник по ОФД: продление</h1>
             <div id="stage-text">Загрузка сценариев...</div>
             <div id="options"></div>
             <button id="back-btn" style="display: none;">Назад</button>
         </div>
+        <!-- Правая панель с логом и историей -->
         <div class="backup-window">
             <h2>Лог действий</h2>
             <textarea id="log" readonly></textarea>
