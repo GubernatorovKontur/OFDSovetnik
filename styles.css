@@ -17,6 +17,7 @@ body {
 }
 
 .left-panel, .main-window, .backup-window {
+  max-width: 450px;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
@@ -54,7 +55,7 @@ h2 {
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 20px; /* Увеличен отступ между полями ввода */
 }
 
 label {
@@ -80,6 +81,17 @@ input:focus {
   outline: none;
 }
 
+textarea {
+  width: 100%;
+  height: 200px;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fafafa;
+  resize: none;
+}
+
 button {
   padding: 12px;
   background: linear-gradient(135deg, #00CCAE, #00A88F);
@@ -89,8 +101,7 @@ button {
   border-radius: 6px;
   font-weight: 600;
   transition: background 0.3s ease, transform 0.2s ease;
-  margin-right: 8px;
-  margin-top: 10px;
+  margin-top: 15px; /* Увеличен отступ сверху */
 }
 
 button:hover {
@@ -102,29 +113,16 @@ button:active {
   transform: translateY(0);
 }
 
+#options button {
+  margin-bottom: 15px; /* Увеличен отступ между кнопками выбора */
+}
+
 #stage-text {
   margin-bottom: 20px;
   font-size: 16px;
   color: #333;
   max-height: 300px;
   overflow-y: auto;
-}
-
-#options {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-#log {
-  width: 100%;
-  height: 200px;
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  background: #fafafa;
-  resize: none;
 }
 
 #history-list {
