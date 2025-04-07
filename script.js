@@ -7,6 +7,7 @@ let choiceHistory = []; // Для хранения истории выборов
 async function loadScenarios() {
     try {
         const response = await fetch('scenarios.json');
+        if (!response.ok) throw new Error('Не удалось загрузить scenarios.json');
         scenarios = await response.json();
         displayStage(0);
     } catch (error) {
@@ -54,7 +55,6 @@ function updateHistory() {
         li.innerText = `${entry.choice} (Этап ${entry.stageId})`;
         li.style.cursor = "pointer";
         li.onclick = () => {
-            // Возвращаемся к выбранному этапу
             currentStage = entry.next;
             logEntries = logEntries.slice(0, index + 1); // Сохраняем лог до этого выбора
             history = history.slice(0, index + 1); // Обрезаем историю
@@ -70,8 +70,7 @@ function updateHistory() {
 function goBack() {
     if (history.length > 0) {
         currentStage = history.pop();
-        // Не удаляем последний logEntries, просто возвращаемся
-        choiceHistory.pop(); // Удаляем последний выбор из истории
+        choiceHistory.pop(); // Удаляем последний выбор
         displayStage(currentStage);
         updateHistory();
     }
@@ -88,32 +87,32 @@ document.getElementById("copy-log-btn").onclick = () => {
 
 document.getElementById("clear-log-btn").onclick = () => {
     logEntries = [];
-    updateLog();
     choiceHistory = [];
+    updateLog();
     updateHistory();
-    alert("Лог очищен!");
+    alert("Лог и история очищены!");
 };
 
 document.getElementById("save-client-data").onclick = () => {
-    const lprName = document.getElementById("lpr-name").value;
-    const companyName = document.getElementById("company-name").value;
-    const managerName = document.getElementById("manager-name").value;
-    const cassCount = document.getElementById("cass-count").value;
-    const subscriptionEnd = document.getElementById("subscription-end").value;
-    const fnEnd = document.getElementById("fn-end").value;
+    const lprName = document.getElementById("lpr-name").value || "не указано";
+    const companyName = document.getElementById("company-name").value || "не указано";
+    const managerName = document.getElementById("manager-name").value || "не указано";
+    const cassCount = document.getElementById("cass-count").value || "не указано";
+    const subscriptionEnd = document.getElementById("subscription-end").value || "не указано";
+    const fnEnd = document.getElementById("fn-end").value || "не указано";
 
     const clientData = [
-        `Имя ЛПР: ${lprName || "не указано"}`,
-        `Название компании: ${companyName || "не указано"}`,
-        `Имя менеджера: ${managerName || "не указано"}`,
-        `Количество касс: ${cassCount || "не указано"}`,
-        `Окончание подписки: ${subscriptionEnd || "не указано"}`,
-        `Окончание ФН: ${fnEnd || "не указано"}`
+        "--- Данные клиента ---",
+        `Имя ЛПР: ${lprName}`,
+        `Название компании: ${companyName}`,
+        `Имя менеджера: ${managerName}`,
+        `Количество касс: ${cassCount}`,
+        `Окончание подписки: ${subscriptionEnd}`,
+        `Окончание ФН: ${fnEnd}`
     ];
-    logEntries.unshift("--- Данные клиента ---");
     logEntries.unshift(...clientData);
     updateLog();
 };
 
-// Загружаем сценарии при старте
+// Старт
 loadScenarios();
