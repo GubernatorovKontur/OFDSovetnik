@@ -35,7 +35,10 @@ function renderDiagram() {
                         </div>
                         <div class="form-group">
                             <label>Следующий (ID):</label>
-                            <input type="text" value="${opt.next}" onchange="updateOption(${stageIndex}, ${optIndex}, 'next', this.value)">
+                            <select onchange="updateOption(${stageIndex}, ${optIndex}, 'next', this.value)">
+                                <option value="">Выберите этап</option>
+                                ${scenarios.map(s => `<option value="${s.id}" ${opt.next === s.id ? "selected" : ""}>${s.id}</option>`).join("")}
+                            </select>
                         </div>
                         <div class="form-group">
                             <label>Лог:</label>
@@ -50,10 +53,9 @@ function renderDiagram() {
         `;
         stagesDiv.appendChild(stageDiv);
 
-        const stageHeight = stageDiv.offsetHeight || 200; // Фallback для начального рендера
-        yOffset += stageHeight + 60; // Увеличен отступ для видимости
+        const stageHeight = stageDiv.offsetHeight || 200;
+        yOffset += stageHeight + 60;
 
-        // Собираем стрелки
         stage.options.forEach((opt, optIndex) => {
             if (opt.next) {
                 arrows.push({ fromStage: stage.id, toStage: opt.next, optionIndex: optIndex });
@@ -61,10 +63,8 @@ function renderDiagram() {
         });
     });
 
-    // Устанавливаем высоту контейнера
     diagram.style.height = `${yOffset + 100}px`;
 
-    // Рисуем стрелки
     const svg = document.getElementById("arrows");
     svg.setAttribute("height", yOffset + 100);
     svg.innerHTML = "";
@@ -78,12 +78,10 @@ function renderDiagram() {
         if (fromDiv && toDiv) {
             const fromOption = fromDiv.querySelectorAll(".option-card")[arrow.optionIndex];
             if (fromOption) {
-                const fromRect = fromOption.getBoundingClientRect();
-                const diagramRect = diagram.getBoundingClientRect();
                 const fromY = parseInt(fromDiv.style.top) + fromOption.offsetTop + fromOption.offsetHeight / 2;
                 const toY = parseInt(toDiv.style.top) + 20;
-                const x1 = 600; // Правая граница блока
-                const x2 = 300; // Центр следующего блока
+                const x1 = 600;
+                const x2 = 300;
                 svg.innerHTML += `
                     <path d="M${x1},${fromY} C${x1 + 50},${fromY} ${x2 - 50},${toY} ${x2},${toY}" 
                           stroke="#00A88F" stroke-width="2" fill="none"/>
@@ -135,7 +133,8 @@ function deleteOption(stageIndex, optIndex) {
 }
 
 function updateJsonOutput() {
-    document.getElementById("json-output").value = JSON.stringify(scenarios, null, 2);
+    const jsonOutput = document.getElementById("json-output");
+    jsonOutput.value = JSON.stringify(scenarios, null, 2);
 }
 
 document.getElementById("add-stage-btn").onclick = addStage;
@@ -162,6 +161,7 @@ document.getElementById("json-file").onchange = (event) => {
             try {
                 scenarios = JSON.parse(e.target.result);
                 renderDiagram();
+                updateJsonOutput(); // Явно обновляем JSON-код
             } catch (error) {
                 alert("Ошибка загрузки JSON: " + error.message);
             }
