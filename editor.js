@@ -50,10 +50,10 @@ function renderDiagram() {
         `;
         stagesDiv.appendChild(stageDiv);
 
-        const stageHeight = stageDiv.offsetHeight;
-        yOffset += stageHeight + 40;
+        const stageHeight = stageDiv.offsetHeight || 200; // Фallback для начального рендера
+        yOffset += stageHeight + 60; // Увеличен отступ для видимости
 
-        // Собираем стрелки для вариантов
+        // Собираем стрелки
         stage.options.forEach((opt, optIndex) => {
             if (opt.next) {
                 arrows.push({ fromStage: stage.id, toStage: opt.next, optionIndex: optIndex });
@@ -61,8 +61,12 @@ function renderDiagram() {
         });
     });
 
+    // Устанавливаем высоту контейнера
+    diagram.style.height = `${yOffset + 100}px`;
+
     // Рисуем стрелки
     const svg = document.getElementById("arrows");
+    svg.setAttribute("height", yOffset + 100);
     svg.innerHTML = "";
     arrows.forEach(arrow => {
         const fromDiv = Array.from(document.querySelectorAll(".stage-card")).find(
@@ -73,15 +77,19 @@ function renderDiagram() {
         );
         if (fromDiv && toDiv) {
             const fromOption = fromDiv.querySelectorAll(".option-card")[arrow.optionIndex];
-            const fromY = parseInt(fromDiv.style.top) + fromOption.offsetTop + fromOption.offsetHeight / 2;
-            const toY = parseInt(toDiv.style.top) + 20;
-            const x1 = 600; // Правая граница блока
-            const x2 = 300; // Центр следующего блока
-            svg.innerHTML += `
-                <path d="M${x1},${fromY} C${x1 + 50},${fromY} ${x2 - 50},${toY} ${x2},${toY}" 
-                      stroke="#00A88F" stroke-width="2" fill="none"/>
-                <polygon points="${x2-5},${toY-5} ${x2+5},${toY-5} ${x2},${toY}" fill="#00A88F"/>
-            `;
+            if (fromOption) {
+                const fromRect = fromOption.getBoundingClientRect();
+                const diagramRect = diagram.getBoundingClientRect();
+                const fromY = parseInt(fromDiv.style.top) + fromOption.offsetTop + fromOption.offsetHeight / 2;
+                const toY = parseInt(toDiv.style.top) + 20;
+                const x1 = 600; // Правая граница блока
+                const x2 = 300; // Центр следующего блока
+                svg.innerHTML += `
+                    <path d="M${x1},${fromY} C${x1 + 50},${fromY} ${x2 - 50},${toY} ${x2},${toY}" 
+                          stroke="#00A88F" stroke-width="2" fill="none"/>
+                    <polygon points="${x2-5},${toY-5} ${x2+5},${toY-5} ${x2},${toY}" fill="#00A88F"/>
+                `;
+            }
         }
     });
 
