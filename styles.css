@@ -1,27 +1,34 @@
+/* Общие стили */
 body {
   font-family: 'Roboto', Arial, sans-serif;
   margin: 0;
   padding: 15px;
   min-width: 350px;
   background: linear-gradient(135deg, #f9f9f9 0%, #ececec 100%);
-  overflow: hidden;
-  border-radius: 16px;
+  /* Прокрутка всей страницы включена */
 }
 
 .container {
-  display: flex;
-  gap: 20px;
   max-width: 1400px;
   margin: 0 auto;
   animation: fadeIn 0.3s ease-in-out;
 }
 
-.left-panel, .main-window, .backup-window {
-  max-width: 450px;
+/* Анимация появления */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Стили для index.html (основной интерфейс) */
+.left-panel,
+.main-window,
+.backup-window {
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   padding: 20px;
+  margin-bottom: 20px; /* Отступ для прокрутки */
 }
 
 .left-panel {
@@ -37,6 +44,17 @@ body {
 .backup-window {
   width: 30%;
   min-width: 300px;
+}
+
+@media (max-width: 1200px) {
+  .container {
+    flex-direction: column;
+  }
+  .left-panel,
+  .main-window,
+  .backup-window {
+    width: 100%;
+  }
 }
 
 h1 {
@@ -55,7 +73,7 @@ h2 {
 }
 
 .form-group {
-  margin-bottom: 20px; /* Увеличен отступ между полями ввода */
+  margin-bottom: 20px;
 }
 
 label {
@@ -65,7 +83,9 @@ label {
   font-weight: 500;
 }
 
-input {
+input,
+textarea,
+select {
   width: 100%;
   padding: 10px;
   box-sizing: border-box;
@@ -75,20 +95,15 @@ input {
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-input:focus {
+input:focus,
+textarea:focus,
+select:focus {
   border-color: #00CCAE;
   box-shadow: 0 0 8px rgba(0, 204, 174, 0.2);
   outline: none;
 }
 
 textarea {
-  width: 100%;
-  height: 200px;
-  margin-bottom: 15px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  background: #fafafa;
   resize: none;
 }
 
@@ -101,7 +116,7 @@ button {
   border-radius: 6px;
   font-weight: 600;
   transition: background 0.3s ease, transform 0.2s ease;
-  margin-top: 15px; /* Увеличен отступ сверху */
+  margin-top: 15px;
 }
 
 button:hover {
@@ -114,7 +129,7 @@ button:active {
 }
 
 #options button {
-  margin-bottom: 15px; /* Увеличен отступ между кнопками выбора */
+  margin-bottom: 15px;
 }
 
 #stage-text {
@@ -147,17 +162,23 @@ button:active {
   border-bottom: none;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.editor-link {
+  text-align: center;
+  margin-bottom: 20px;
 }
+
+.editor-link button {
+  padding: 10px 20px;
+}
+
+/* Стили для editor.html (редактор) */
 .editor-panel {
   width: 100%;
-  max-width: 1200px;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   padding: 20px;
+  /* Растягиваем для прокрутки страницы */
 }
 
 .editor-controls {
@@ -169,152 +190,7 @@ button:active {
 .editor-content {
   display: flex;
   gap: 20px;
-}
-
-.scenario-builder {
-  width: 60%;
-}
-
-.json-preview {
-  width: 40%;
-}
-
-#json-output {
-  width: 100%;
-  height: 500px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  background: #fafafa;
-  resize: none;
-  font-family: monospace;
-}
-
-.stage-card {
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 20px;
-  background: #fff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-}
-
-.option-card {
-  border: 1px solid #e5e5e5;
-  border-radius: 6px;
-  padding: 10px;
-  margin-bottom: 10px;
-  background: #f9f9f9;
-}
-
-.stage-card h3,
-.stage-card h4 {
-  margin: 0 0 10px;
-  color: #222;
-}
-
-.stage-card textarea {
-  height: 100px;
-}
-/* Существующие стили для .container, .left-panel и т.д. оставляем без изменений */
-
-.editor-panel {
-  width: 100%;
-  max-width: 1200px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  padding: 20px;
-}
-
-.editor-controls {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.editor-content {
-  display: flex;
-  gap: 20px;
-}
-
-.scenario-builder {
-  width: 60%;
-}
-
-.json-preview {
-  width: 40%;
-}
-
-#json-output {
-  width: 100%;
-  height: 500px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  background: #fafafa;
-  resize: none;
-  font-family: monospace;
-}
-
-.edit-form {
-  position: fixed;
-  top: 20%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #fff;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-}
-
-.option-card {
-  border: 1px solid #e5e5e5;
-  border-radius: 6px;
-  padding: 10px;
-  margin-bottom: 10px;
-  background: #f9f9f9;
-}
-
-.edit-form h3,
-.edit-form h4 {
-  margin: 0 0 10px;
-  color: #222;
-}
-
-.edit-form textarea {
-  width: 100%;
-  height: 100px;
-  margin-bottom: 10px;
-}
-
-.edit-form input,
-.edit-form textarea {
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 8px;
-}
-/* Существующие стили для .container, .left-panel и т.д. оставляем */
-
-.editor-panel {
-  width: 100%;
-  max-width: 1200px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  padding: 20px;
-}
-
-.editor-controls {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.editor-content {
-  display: flex;
-  gap: 20px;
+  flex-wrap: wrap; /* Для адаптивности */
 }
 
 .scenario-builder {
@@ -326,108 +202,11 @@ button:active {
   width: 40%;
 }
 
-#json-output {
-  width: 100%;
-  height: 500px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  background: #fafafa;
-  resize: none;
-  font-family: monospace;
-}
-
-#diagram {
-  position: relative;
-}
-
-.stage-card {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 400px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 20px;
-  background: #fff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  z-index: 1;
-}
-
-.option-card {
-  border: 1px solid #e5e5e5;
-  border-radius: 6px;
-  padding: 10px;
-  margin-bottom: 10px;
-  background: #f9f9f9;
-}
-
-.stage-card h3,
-.stage-card h4 {
-  margin: 0 0 10px;
-  color: #222;
-}
-
-.stage-card textarea {
-  width: 100%;
-  height: 100px;
-}
-
-.stage-card input,
-.option-card input {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-}
-
-#arrows {
-  pointer-events: none;
-}
-/* Существующие стили для .left-panel, .main-window и т.д. оставляем */
-
-body {
-  font-family: 'Roboto', Arial, sans-serif;
-  margin: 0;
-  padding: 15px;
-  min-width: 350px;
-  background: linear-gradient(135deg, #f9f9f9 0%, #ececec 100%);
-  /* Убрали overflow: hidden */
-}
-
-.container {
-  max-width: 1400px;
-  margin: 0 auto;
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-.editor-panel {
-  width: 100%;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  padding: 20px;
-}
-
-.editor-controls {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.editor-content {
-  display: flex;
-  gap: 20px;
-}
-
-.scenario-builder {
-  width: 60%;
-  position: relative;
-}
-
-.json-preview {
-  width: 40%;
+@media (max-width: 1000px) {
+  .scenario-builder,
+  .json-preview {
+    width: 100%;
+  }
 }
 
 #json-output {
@@ -437,123 +216,15 @@ body {
   border: 1px solid #ddd;
   border-radius: 6px;
   background: #fafafa;
-  resize: none;
-  font-family: monospace;
-}
-
-#diagram {
-  position: relative;
-  width: 100%;
-  /* Убрали max-height, высота задаётся JS */
-}
-
-.stage-card {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 400px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 20px;
-  background: #fff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  z-index: 1;
-}
-
-.option-card {
-  border: 1px solid #e5e5e5;
-  border-radius: 6px;
-  padding: 10px;
-  margin-bottom: 10px;
-  background: #f9f9f9;
-}
-
-.stage-card h3,
-.stage-card h4 {
-  margin: 0 0 10px;
-  color: #222;
-}
-
-.stage-card textarea {
-  width: 100%;
-  height: 100px;
-}
-
-.stage-card input,
-.option-card input {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-}
-
-#arrows {
-  pointer-events: none;
-}
-/* Сохраняем стили для index.html (left-panel, main-window и т.д.) */
-
-body {
-  font-family: 'Roboto', Arial, sans-serif;
-  margin: 0;
-  padding: 15px;
-  min-width: 350px;
-  background: linear-gradient(135deg, #f9f9f9 0%, #ececec 100%);
-  /* Убрали overflow: hidden */
-}
-
-.container {
-  max-width: 1400px;
-  margin: 0 auto;
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-.editor-panel {
-  width: 100%;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  padding: 20px;
-  min-height: 100vh; /* Растягиваем для прокрутки */
-}
-
-.editor-controls {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.editor-content {
-  display: flex;
-  gap: 20px;
-}
-
-.scenario-builder {
-  width: 60%;
-  position: relative;
-}
-
-.json-preview {
-  width: 40%;
-}
-
-#json-output {
-  width: 100%;
-  height: 500px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  background: #fafafa;
-  resize: none;
   font-family: monospace;
 }
 
 .diagram-container {
   position: relative;
   width: 100%;
-  /* Высота задаётся JS, прокрутка внутри */
-  max-height: 600px;
+  max-height: 600px; /* Прокрутка внутри схемы */
   overflow-y: auto;
+  margin-bottom: 20px;
 }
 
 .stage-card {
@@ -600,9 +271,4 @@ body {
 
 #arrows {
   pointer-events: none;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
