@@ -3,18 +3,17 @@ let scenarios = [];
 function renderDiagram() {
     const diagram = document.getElementById("diagram");
     diagram.innerHTML = `
-        <svg id="arrows" style="position: absolute; width: 100%; height: 100%; z-index: -1;"></svg>
+        <svg id="arrows" style="width: 100%;"></svg>
         <div id="stages"></div>
     `;
 
     const stagesDiv = document.getElementById("stages");
-    let yOffset = 20;
     const arrows = [];
 
     scenarios.forEach((stage, stageIndex) => {
         const stageDiv = document.createElement("div");
         stageDiv.className = "stage-card";
-        stageDiv.style.top = `${yOffset}px`;
+        stageDiv.dataset.id = stage.id; // Для поиска при рисовании стрелок
         stageDiv.innerHTML = `
             <h3>Этап ${stage.id}</h3>
             <div class="form-group">
@@ -28,7 +27,7 @@ function renderDiagram() {
             <h4>Варианты ответов</h4>
             <div class="options">
                 ${stage.options.map((opt, optIndex) => `
-                    <div class="option-card">
+                    <div class="option-card" data-option-index="${optIndex}">
                         <div class="form-group">
                             <label>Текст:</label>
                             <input type="text" value="${opt.text}" onchange="updateOption(${stageIndex}, ${optIndex}, 'text', this.value)">
@@ -53,9 +52,6 @@ function renderDiagram() {
         `;
         stagesDiv.appendChild(stageDiv);
 
-        const stageHeight = stageDiv.offsetHeight || 200;
-        yOffset += stageHeight + 60;
-
         stage.options.forEach((opt, optIndex) => {
             if (opt.next) {
                 arrows.push({ fromStage: stage.id, toStage: opt.next, optionIndex: optIndex });
@@ -63,33 +59,39 @@ function renderDiagram() {
         });
     });
 
-    diagram.style.height = `${yOffset + 100}px`;
+    // Рисуем стрелки после рендеринга DOM
+    setTimeout(() => {
+        const svg = document.getElementById("arrows");
+        let totalHeight = 0;
+        const stageCards = document.querySelectorAll(".stage-card");
+        stageCards.forEach(card => {
+            totalHeight += card.offsetHeight + 40; // Учитываем отступы
+        });
+        svg.setAttribute("height", totalHeight);
 
-    const svg = document.getElementById("arrows");
-    svg.setAttribute("height", yOffset + 100);
-    svg.innerHTML = "";
-    arrows.forEach(arrow => {
-        const fromDiv = Array.from(document.querySelectorAll(".stage-card")).find(
-            card => card.querySelector("h3").textContent.includes(arrow.fromStage)
-        );
-        const toDiv = Array.from(document.querySelectorAll(".stage-card")).find(
-            card => card.querySelector("h3").textContent.includes(arrow.toStage)
-        );
-        if (fromDiv && toDiv) {
-            const fromOption = fromDiv.querySelectorAll(".option-card")[arrow.optionIndex];
-            if (fromOption) {
-                const fromY = parseInt(fromDiv.style.top) + fromOption.offsetTop + fromOption.offsetHeight / 2;
-                const toY = parseInt(toDiv.style.top) + 20;
-                const x1 = 600;
-                const x2 = 300;
-                svg.innerHTML += `
-                    <path d="M${x1},${fromY} C${x1 + 50},${fromY} ${x2 - 50},${toY} ${x2},${toY}" 
-                          stroke="#00A88F" stroke-width="2" fill="none"/>
-                    <polygon points="${x2-5},${toY-5} ${x2+5},${toY-5} ${x2},${toY}" fill="#00A88F"/>
-                `;
+        svg.innerHTML = "";
+        arrows.forEach(arrow => {
+            const fromDiv = Array.from(stageCards).find(card => card.dataset.id === arrow.fromStage);
+            const toDiv = Array.from(stageCards).find(card => card.dataset.id === arrow.toStage);
+            if (fromDiv && toDiv) {
+                const fromOption = fromDiv.querySelector(`.option-card[data-option-index="${arrow.optionIndex}"]`);
+                if (fromOption) {
+                    const fromRect = fromOption.getBoundingClientRect();
+                    const toRect = toDiv.getBoundingClientRect();
+                    const diagramRect = diagram.getBoundingClientRect();
+                    const fromY = fromRect.top - diagramRect.top + fromRect.height / 2 + diagram.scrollTop;
+                    const toY = toRect.top - diagramRect.top + 20 + diagram.scrollTop;
+                    const x1 = fromRect.right - diagramRect.left;
+                    const x2 = toRect.left - diagramRect.left + toRect.width / 2;
+                    svg.innerHTML += `
+                        <path d="M${x1},${fromY} C${x1 + 50},${fromY} ${x2 - 50},${toY} ${x2},${toY}" 
+                              stroke="#00A88F" stroke-width="2" fill="none"/>
+                        <polygon points="${x2-5},${toY-5} ${x2+5},${toY-5} ${x2},${toY}" fill="#00A88F"/>
+                    `;
+                }
             }
-        }
-    });
+        });
+    }, 0);
 
     updateJsonOutput();
 }
@@ -134,7 +136,9 @@ function deleteOption(stageIndex, optIndex) {
 
 function updateJsonOutput() {
     const jsonOutput = document.getElementById("json-output");
-    jsonOutput.value = JSON.stringify(scenarios, null, 2);
+    if (jsonOutput) {
+        jsonOutput.value = JSON.stringify(scenarios, null, 2);
+    }
 }
 
 document.getElementById("add-stage-btn").onclick = addStage;
@@ -161,7 +165,7 @@ document.getElementById("json-file").onchange = (event) => {
             try {
                 scenarios = JSON.parse(e.target.result);
                 renderDiagram();
-                updateJsonOutput(); // Явно обновляем JSON-код
+                updateJsonOutput();
             } catch (error) {
                 alert("Ошибка загрузки JSON: " + error.message);
             }
