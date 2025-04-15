@@ -65,10 +65,10 @@ function renderDiagram() {
         const stageCards = document.querySelectorAll(".stage-card");
         let totalWidth = 0;
         stageCards.forEach(card => {
-            totalWidth += card.offsetWidth + 40; // Учитываем отступы
+            totalWidth += card.offsetWidth + 40;
         });
         svg.setAttribute("width", totalWidth);
-        svg.setAttribute("height", stageCards[0]?.offsetHeight || 500);
+        svg.setAttribute("height", 400); // Фиксированная высота для теста
 
         svg.innerHTML = "";
         arrows.forEach(arrow => {
@@ -77,15 +77,15 @@ function renderDiagram() {
             if (fromDiv && toDiv) {
                 const fromOption = fromDiv.querySelector(`.option-card[data-option-index="${arrow.optionIndex}"]`);
                 if (fromOption) {
-                    const fromRect = fromOption.getBoundingClientRect();
+                    const fromRect = fromDiv.getBoundingClientRect();
                     const toRect = toDiv.getBoundingClientRect();
                     const diagramRect = diagram.getBoundingClientRect();
                     const fromX = fromRect.right - diagramRect.left;
                     const toX = toRect.left - diagramRect.left;
-                    const y = fromRect.top - diagramRect.top + fromRect.height / 2 + diagram.scrollTop;
+                    const y = 200; // Фиксированная Y для теста
                     svg.innerHTML += `
-                        <path d="M${fromX},${y} H${toX}" 
-                              stroke="#00A88F" stroke-width="2" fill="none"/>
+                        <line x1="${fromX}" y1="${y}" x2="${toX}" y2="${y}" 
+                              stroke="#00A88F" stroke-width="2"/>
                         <polygon points="${toX-5},${y-5} ${toX-5},${y+5} ${toX},${y}" fill="#00A88F"/>
                     `;
                 }
