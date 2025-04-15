@@ -225,20 +225,21 @@ button:active {
 }
 
 #stages {
+  display: flex;
+  flex-wrap: nowrap; /* Горизонтальное расположение */
   position: relative;
-  width: 100%;
-  min-height: 100px; /* Гарантируем пространство */
+  min-height: 100px;
+  padding: 10px;
 }
 
 .stage-card {
   width: 400px;
-  margin: 20px auto; /* Центрируем без absolute */
+  margin: 0 20px; /* Отступы между блоками */
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 15px;
   background: #fff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  position: relative; /* Для корректного рендера */
 }
 
 .option-card {
