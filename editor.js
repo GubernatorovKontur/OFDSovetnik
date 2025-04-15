@@ -13,7 +13,7 @@ function renderDiagram() {
     scenarios.forEach((stage, stageIndex) => {
         const stageDiv = document.createElement("div");
         stageDiv.className = "stage-card";
-        stageDiv.dataset.id = stage.id; // Для поиска при рисовании стрелок
+        stageDiv.dataset.id = stage.id;
         stageDiv.innerHTML = `
             <h3>Этап ${stage.id}</h3>
             <div class="form-group">
@@ -59,15 +59,16 @@ function renderDiagram() {
         });
     });
 
-    // Рисуем стрелки после рендеринга DOM
+    // Рисуем стрелки
     setTimeout(() => {
         const svg = document.getElementById("arrows");
-        let totalHeight = 0;
         const stageCards = document.querySelectorAll(".stage-card");
+        let totalWidth = 0;
         stageCards.forEach(card => {
-            totalHeight += card.offsetHeight + 40; // Учитываем отступы
+            totalWidth += card.offsetWidth + 40; // Учитываем отступы
         });
-        svg.setAttribute("height", totalHeight);
+        svg.setAttribute("width", totalWidth);
+        svg.setAttribute("height", stageCards[0]?.offsetHeight || 500);
 
         svg.innerHTML = "";
         arrows.forEach(arrow => {
@@ -79,14 +80,13 @@ function renderDiagram() {
                     const fromRect = fromOption.getBoundingClientRect();
                     const toRect = toDiv.getBoundingClientRect();
                     const diagramRect = diagram.getBoundingClientRect();
-                    const fromY = fromRect.top - diagramRect.top + fromRect.height / 2 + diagram.scrollTop;
-                    const toY = toRect.top - diagramRect.top + 20 + diagram.scrollTop;
-                    const x1 = fromRect.right - diagramRect.left;
-                    const x2 = toRect.left - diagramRect.left + toRect.width / 2;
+                    const fromX = fromRect.right - diagramRect.left;
+                    const toX = toRect.left - diagramRect.left;
+                    const y = fromRect.top - diagramRect.top + fromRect.height / 2 + diagram.scrollTop;
                     svg.innerHTML += `
-                        <path d="M${x1},${fromY} C${x1 + 50},${fromY} ${x2 - 50},${toY} ${x2},${toY}" 
+                        <path d="M${fromX},${y} H${toX}" 
                               stroke="#00A88F" stroke-width="2" fill="none"/>
-                        <polygon points="${x2-5},${toY-5} ${x2+5},${toY-5} ${x2},${toY}" fill="#00A88F"/>
+                        <polygon points="${toX-5},${y-5} ${toX-5},${y+5} ${toX},${y}" fill="#00A88F"/>
                     `;
                 }
             }
