@@ -5,13 +5,11 @@ body {
   padding: 15px;
   min-width: 350px;
   background: linear-gradient(135deg, #f9f9f9 0%, #ececec 100%);
-  /* Прокрутка всей страницы включена */
 }
 
 .container {
   max-width: 1400px;
   margin: 0 auto;
-  animation: fadeIn 0.3s ease-in-out;
 }
 
 /* Анимация появления */
@@ -20,7 +18,7 @@ body {
   to { opacity: 1; }
 }
 
-/* Стили для index.html (основной интерфейс) */
+/* Стили для index.html */
 .left-panel,
 .main-window,
 .backup-window {
@@ -28,7 +26,7 @@ body {
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   padding: 20px;
-  margin-bottom: 20px; /* Отступ для прокрутки */
+  margin-bottom: 20px;
 }
 
 .left-panel {
@@ -116,7 +114,7 @@ button {
   border-radius: 6px;
   font-weight: 600;
   transition: background 0.3s ease, transform 0.2s ease;
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
 button:hover {
@@ -171,14 +169,12 @@ button:active {
   padding: 10px 20px;
 }
 
-/* Стили для editor.html (редактор) */
+/* Стили для editor.html */
 .editor-panel {
-  width: 100%;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   padding: 20px;
-  /* Растягиваем для прокрутки страницы */
 }
 
 .editor-controls {
@@ -190,16 +186,17 @@ button:active {
 .editor-content {
   display: flex;
   gap: 20px;
-  flex-wrap: wrap; /* Для адаптивности */
+  flex-wrap: wrap;
 }
 
 .scenario-builder {
   width: 60%;
-  position: relative;
+  min-width: 400px;
 }
 
 .json-preview {
   width: 40%;
+  min-width: 300px;
 }
 
 @media (max-width: 1000px) {
@@ -220,25 +217,28 @@ button:active {
 }
 
 .diagram-container {
+  width: 100%;
+  max-height: 600px;
+  overflow-y: auto;
+  position: relative;
+  padding-bottom: 20px;
+}
+
+#stages {
   position: relative;
   width: 100%;
-  max-height: 600px; /* Прокрутка внутри схемы */
-  overflow-y: auto;
-  margin-bottom: 20px;
+  min-height: 100px; /* Гарантируем пространство */
 }
 
 .stage-card {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
   width: 400px;
+  margin: 20px auto; /* Центрируем без absolute */
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 15px;
-  margin-bottom: 20px;
   background: #fff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  z-index: 1;
+  position: relative; /* Для корректного рендера */
 }
 
 .option-card {
@@ -270,5 +270,10 @@ button:active {
 }
 
 #arrows {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: -1;
   pointer-events: none;
 }
